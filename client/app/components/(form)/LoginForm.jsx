@@ -2,11 +2,12 @@
 import InputField from "@/components/InputField";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { loginSchema } from "@/lib/schemas/authschemas";
 import Button from "@/components/Button";
 import AuthLayout from "@/components/AuthLayout";
+import Link from "next/link";
+import { loginAuth } from "@/lib/api/authentication";
+import { useRouter } from "next/navigation";
 
 const LoginForm = () => {
   const {
@@ -18,10 +19,9 @@ const LoginForm = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log("🚀 ~ onSubmit ~ data:", data);
-    toast.success("Successfull ");
-    reset();
+  let navigateTo = useRouter();
+  const onSubmit = async (data) => {
+    loginAuth(data, navigateTo, reset);
   };
   return (
     <div>
@@ -55,6 +55,15 @@ const LoginForm = () => {
             >
               login
             </Button>
+            <p className="text-sm mt-6 text-gray-800">
+              Don't have an account?
+              <Link
+                href="/register"
+                className="text-blue-500 font-semibold hover:underline ml-1"
+              >
+                Sign Up
+              </Link>
+            </p>
           </form>
         </AuthLayout>
       </div>
