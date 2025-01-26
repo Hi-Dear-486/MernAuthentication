@@ -1,3 +1,4 @@
+"use client";
 import next from "next";
 import express from "express";
 import { config } from "dotenv";
@@ -14,16 +15,14 @@ const handle = app.getRequestHandler();
 
 config({ path: ".env.local" });
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 4000;
 app.prepare().then(async () => {
   await connectDB();
 
   removeUnverifiedAccounts();
+
   // middleware
   const server = express();
-  server.use(express.json());
-  server.use(cookieParser());
-  server.use("/api/user", userRoutes);
 
   server.use(
     cors({
@@ -32,6 +31,9 @@ app.prepare().then(async () => {
       credentials: true,
     })
   );
+  server.use(express.json());
+  server.use(cookieParser());
+  server.use("/api/user", userRoutes);
 
   // custom route
   server.get("/api/custom", (req, res) => {
@@ -45,6 +47,6 @@ app.prepare().then(async () => {
 
   server.listen(PORT, (err) => {
     if (err) throw err;
-    console.log(`Ready on http://localhost:${PORT}`);
+    console.log(`Readyy on http://localhost:${PORT}`);
   });
 });
